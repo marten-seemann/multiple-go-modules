@@ -15,12 +15,10 @@ runs:
         for dir in $(find . \( -name vendor -o -name '[._].*' -o -name node_modules \) -prune -o -name go.mod -print | sed 's:/go.mod$::'); do
           echo "#=#=#=# $dir #=#=#=#"
           pushd $dir > /dev/null
-          set +e -x
+          s=0
           ( 
             ${{ inputs.run }}
-          )
-          s=$?
-          set -e +x
+          ) || s=$?
           if [[ $s != 0 ]]; then status=$s; fi
           popd > /dev/null
           echo -e "\n\n"
