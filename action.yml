@@ -6,10 +6,16 @@ inputs:
     description: "Command(s) to run"
     required: true
 
+outputs:
+  output:
+    description: "output defined by the script"
+    value: ${{ steps.run.outputs.output }}
+
 runs:
   using: "composite"
   steps:
     - shell: bash
+      id: run
       run: |
         status=0
         for dir in $(find . \( -name vendor -o -name '[._].*' -o -name node_modules \) -prune -o -name go.mod -print | sed 's:/go.mod$::'); do
