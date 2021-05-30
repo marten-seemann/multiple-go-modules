@@ -13,9 +13,7 @@ Take the following example, running a command (or multiple commands) directly:
 ```yml
 steps:
   - name: Code Quality Checks
-    run: |
-      go vet ./...
-      gofmt .
+    run: go vet ./...
 ```
 
 Using this action, this would run the same command(s) in all Go modules:
@@ -25,7 +23,5 @@ steps:
   - name: Code Quality Checks
     uses: protocol/multiple-go-modules@master
     with:
-      run: |
-        go vet ./...
-        gofmt .
+      run: go vet ./...
 ```
