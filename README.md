@@ -25,3 +25,13 @@ steps:
     with:
       run: go vet ./...
 ```
+
+Optionally, the working directory can be specified, analagously to the [`working-directory` option on `run`](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_iddefaultsrun):
+```yml
+steps:
+  - name: Code Quality Checks
+    uses: protocol/multiple-go-modules@master
+    with:
+      working-directory: scripts
+      run: go vet ./...
+```
