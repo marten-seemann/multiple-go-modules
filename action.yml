@@ -5,11 +5,15 @@ inputs:
   run:
     description: "Command(s) to run"
     required: true
+  working-directory:
+    description: "working directory"
+    required: false
 
 runs:
   using: "composite"
   steps:
     - shell: bash
+      working-directory: ${{ inputs.working-directory }}
       run: |
         status=0
         dirs=$(find . \( -name vendor -o -name '[._].*' -o -name node_modules \) -prune -o -name go.mod -print | sed 's:/go.mod$::')
