@@ -19,7 +19,7 @@ runs:
   using: "composite"
   steps:
     - shell: bash
-      if: inputs.pre != ""
+      if: ${{ inputs.pre != "" }}
       working-directory: ${{ inputs.working-directory }}
       run: ${{ inputs.pre }}
     - shell: bash
@@ -41,6 +41,6 @@ runs:
         done
         exit $status
     - shell: bash
-      if: inputs.post != ""
+      if: ${{ inputs.post != "" }}
       working-directory: ${{ inputs.working-directory }}
       run: ${{ inputs.post }}
