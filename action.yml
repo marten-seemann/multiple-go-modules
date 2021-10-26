@@ -8,15 +8,28 @@ inputs:
   working-directory:
     description: "working directory"
     required: false
-  shell:
-    description: "shell"
+  shellname:
+    description: "shell (options: 'bash' or 'msys2 {0}')"
     default: "bash"
     required: false
 
 runs:
   using: "composite"
   steps:
-    - shell: ${{ inputs.shell }}
+    - name: create bash-or-msys2
+      shell: bash
+      run: |
+        if [[ "${{ inputs.shellname }}" == "msys2 {0}" ]]; then
+          if [[ ! -f "D:/a/_temp/setup-msys2/bash-or-msys2.cmd" ]]; then
+            powershell New-Item -ItemType SymbolicLink -Path "D:/a/_temp/setup-msys2/bash-or-msys2.cmd" -Target "D:/a/_temp/setup-msys2/msys2.cmd"
+          fi
+        elif [[ "${{ inputs.shellname }}" == "bash" ]]; then
+          sudo ln -sf $(which bash) /usr/local/bin/bash-or-msys2
+        else
+          echo "unknown shell: ${{ inputs.shellname }}"
+          exit 1
+        fi
+    - shell: bash-or-msys2 {0}
       working-directory: ${{ inputs.working-directory }}
       run: |
         status=0
