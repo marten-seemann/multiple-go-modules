@@ -16,18 +16,16 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: create bash-or-msys2
+    - name: create bash-or-msys2 (for bash)
       shell: bash
+      if: inputs.shell == 'bash'
+      run: sudo ln -sf $(which bash) /usr/local/bin/bash-or-msys2
+    - name: create bash-or-msys2 (for msys2)
+      shell: bash
+      if: inputs.shell == 'msys2 {0}'
       run: |
-        if [[ "${{ inputs.shell }}" == "msys2 {0}" ]]; then
-          if [[ ! -f "D:/a/_temp/setup-msys2/bash-or-msys2.cmd" ]]; then
-            powershell New-Item -ItemType SymbolicLink -Path "D:/a/_temp/setup-msys2/bash-or-msys2.cmd" -Target "D:/a/_temp/setup-msys2/msys2.cmd"
-          fi
-        elif [[ "${{ inputs.shell }}" == "bash" ]]; then
-          sudo ln -sf $(which bash) /usr/local/bin/bash-or-msys2
-        else
-          echo "unknown shell: ${{ inputs.shell }}"
-          exit 1
+        if [[ ! -f "D:/a/_temp/setup-msys2/bash-or-msys2.cmd" ]]; then
+          powershell New-Item -ItemType SymbolicLink -Path "D:/a/_temp/setup-msys2/bash-or-msys2.cmd" -Target "D:/a/_temp/setup-msys2/msys2.cmd"
         fi
     - shell: bash-or-msys2 {0}
       working-directory: ${{ inputs.working-directory }}
